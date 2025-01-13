@@ -10,6 +10,7 @@ M.default_config = {
 		ui = 0.35, -- UI elements like line numbers, status line, etc. ?
 	},
 	custom_groups = {},
+	ignored_filetypes = {},
 	highlight_categories = {},
 }
 
@@ -119,6 +120,12 @@ local function darken_all_highlights()
 end
 
 local function apply_dynamic_dimming()
+	if user_config.ignored_filetypes then
+		local current_filetype = vim.bo.filetype
+		if vim.tbl_contains(user_config.ignored_filetypes, current_filetype) then
+			return
+		end
+	end
 	darken_all_highlights()
 
 	local augroup = vim.api.nvim_create_augroup("DimInactive", { clear = true })
